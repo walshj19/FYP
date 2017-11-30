@@ -1,0 +1,4 @@
+sceneSetups:
+- path: Assets/Memory Heirarchy.unity
+  isLoaded: 1
+  isActive: 1
