@@ -25,6 +25,8 @@ public class CameraMovementScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+        Input
+
 		if(Input.GetKey(KeyCode.RightArrow))
 		{
 			transform.position = new Vector3(transform.position.x + moveSpeed, transform.position.y, transform.position.z);
@@ -41,40 +43,6 @@ public class CameraMovementScript : MonoBehaviour {
 		{
 			transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + moveSpeed);
 		}
-
-		// zoom
-//		if(Input.GetKey(KeyCode.Q))
-//		{
-//			transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - moveSpeed);
-//		}
-//		if(Input.GetKey(KeyCode.E))
-//		{
-//			transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + moveSpeed);
-//		}
-
-		// Get the left mouse button
-//		if(Input.GetMouseButtonDown(0))
-//		{
-//			// Get mouse origin
-//			mouseOrigin = Input.mousePosition;
-//			isRotating = true;
-//		}
-//
-//		// Get the right mouse button
-//		if(Input.GetMouseButtonDown(1))
-//		{
-//			// Get mouse origin
-//			mouseOrigin = Input.mousePosition;
-//			isPanning = true;
-//		}
-//
-//		// Get the middle mouse button
-//		if(Input.GetMouseButtonDown(2))
-//		{
-//			// Get mouse origin
-//			mouseOrigin = Input.mousePosition;
-//			isZooming = true;
-//		}
 
 		// Disable movements on button release
 		if (!Input.GetMouseButton(0)) isRotating=false;
