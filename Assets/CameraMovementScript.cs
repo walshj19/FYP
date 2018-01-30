@@ -25,7 +25,7 @@ public class CameraMovementScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        Input
+        
 
 		if(Input.GetKey(KeyCode.RightArrow))
 		{
