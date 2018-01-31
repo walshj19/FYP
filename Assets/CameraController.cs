@@ -12,8 +12,16 @@ public class CameraController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        float forward = moveSpeed * Input.GetAxis("Vertical") * Time.deltaTime;
-        float sideways = moveSpeed * Input.GetAxis("Horizontal") * Time.deltaTime;
+        move();
+    }
+
+    // Handles moving the camera on the horizontal and vertical axis
+    void move ()
+    {
+        // The movement scales with the time since the last frame, the set move speed and the axis magnitude
+        float forward = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;
+        float sideways = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
+        // Apply the movement to the transform
         transform.Translate(sideways, 0, forward);
     }
 }
