@@ -5,10 +5,11 @@ using UnityEngine;
 public class MemoryLayer : MonoBehaviour
 {
     public int absoluteLayerNumber;             // The absolute position of this layer in the memory heirarchy
+    public GameObject packetPrefab;
 
-    private MemoryLayer layerAbove;
-    private MemoryLayer layerBelow;
-    private List<MemoryObject> memoryObjects;
+    public MemoryLayer layerAbove;
+    public MemoryLayer layerBelow;
+    protected List<MemoryLocation> memoryLocations;
 
     // Use this for initialization
     void Start()
@@ -22,10 +23,22 @@ public class MemoryLayer : MonoBehaviour
 
     }
 
-    // Service a memory request for a given address
-    public MemoryObject RequestMemory(int address)
+    /* Service a memory request for a given address
+     * If this layer has the location then it will return it
+     * if not it will pass the request to the next layer
+     */
+    public MemoryLocation RequestMemory(int address)
     {
-        return new MemoryObject();
+        // Search the list for the requested memory item
+        foreach (MemoryLocation location in memoryLocations)
+        {
+            if (location.address == address)
+            {
+                return location;
+            }
+        }
+        // If the requested location is not in the list pass the request up to the next layer
+        return layerAbove.RequestMemory(address);
     }
 
     // layerAbove Getter
