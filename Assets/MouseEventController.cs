@@ -5,44 +5,65 @@ using System;
 
 public class MouseEventController : MonoBehaviour {
 
+    public GameObject mouseOverObject = null;
+    public Material defaultMaterial;
+    public Material hoverMaterial;
+    public Material selectedMaterial;
+
 	// Use this for initialization
 	void Start () {
-        Debug.Log("Mouse Event Controller Started");
+        //Debug.Log("Mouse Event Controller Started");
 	}
 
     // Update is called once per frame
     void Update()
     {
+        GameObject newMouseOverObject = CheckForMouseOver();
+        // check it there was a change from the last update
+        if (newMouseOverObject != mouseOverObject)
+        {
+            // if the last object wasn't null revert its material
+            if(mouseOverObject != null)
+            {
+                ApplyMaterial(defaultMaterial);
+            }
+
+            // record the new object
+            mouseOverObject = newMouseOverObject;
+
+            // if the new object isn't null set its material to the hover material
+            if(mouseOverObject != null)
+            {
+                ApplyMaterial(hoverMaterial);
+                Debug.Log("New Object hit: "+mouseOverObject.name);
+            }
+        }
+    }
+
+    /*
+     * Use raycasting to detect what object the mouse is hovering over.
+     * Assigns detected object to mouseOverObject.
+     */
+    private GameObject CheckForMouseOver()
+    {
         //Debug.Log("test1");
         Ray ray = new Ray();
+        GameObject hitObject = null;
+        RaycastHit hitInfo;
 
-        Debug.Log(Camera.main.name);
-        try
-        {
-            // create a ray originating at thr mouse position moving away from the camera
-            ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
-        }
-        catch (Exception e)
-        {
-            Debug.Log(e.Message);
-        }
+        // create a ray originating at thr mouse position moving away from the camera
+        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         // Draw the ray
-        Debug.DrawRay(ray.origin, ray.direction * 1000, Color.yellow, 10, false);
+        //Debug.DrawRay(ray.origin, ray.direction * 1000, Color.yellow);
         //Debug.Log("test2");
 
-        RaycastHit castInfo;
-
         // Do the raycast
-        //RaycastHit[] castInfo = Physics.RaycastAll(ray);
-        //if (castInfo.Length > 0)
-        bool hit = Physics.Raycast(ray, out castInfo, 1000);
-        Debug.Log(castInfo.point);
-        if (hit)
+        if (Physics.Raycast(ray, out hitInfo))
         {
             // Get the root gameobject of the collider that was hit by the ray
-            GameObject hitObject = castInfo.transform.gameObject;
-            Debug.Log("Raycast hit object " + hitObject.name);
+            hitObject = hitInfo.transform.gameObject;
+            //Debug.Log("Raycast hit object " + hitObject.name);
 
             //Debug.Log("Raycast hit " + castInfo.Length);
         }
@@ -51,5 +72,17 @@ public class MouseEventController : MonoBehaviour {
             // The raycast didn't hit anything
             //Debug.Log("Raycast hit nothing");
         }
+        return hitObject;
+    }
+
+    /*
+     * Chage the material on the current mouseOverObject
+     */
+    private void ApplyMaterial(Material newMaterial)
+    {
+        Renderer rend = mouseOverObject.GetComponent<Renderer>();
+        Material[] mats = rend.materials;
+        mats[0] = newMaterial;
+        rend.materials = mats;
     }
 }
