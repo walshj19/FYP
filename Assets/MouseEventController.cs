@@ -5,7 +5,8 @@ using System;
 
 public class MouseEventController : MonoBehaviour {
 
-    public GameObject mouseOverObject = null;
+    public GameObject hoverObject = null;
+    public GameObject selectedObject = null;
     public Material defaultMaterial;
     public Material hoverMaterial;
     public Material selectedMaterial;
@@ -18,45 +19,59 @@ public class MouseEventController : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        GameObject newMouseOverObject = CheckForMouseOver();
-        // check it there was a change from the last update
-        if (newMouseOverObject != mouseOverObject)
+        // record current values to detect change
+        GameObject oldHoverObject = hoverObject;
+        GameObject oldSelectedObject = selectedObject;
+
+        // Get the current hover object
+        hoverObject = GetObjectUnderMouse();
+
+        // check for mouse click
+        if (Input.GetMouseButtonDown(0))
         {
-            // if the last object wasn't null revert its material
-            if(mouseOverObject != null)
-            {
-                ApplyMaterial(defaultMaterial);
-            }
+            selectedObject = hoverObject;
+        }
 
-            // record the new object
-            mouseOverObject = newMouseOverObject;
-
-            // if the new object isn't null set its material to the hover material
-            if(mouseOverObject != null)
+        // if the hover object has changed and isn't the current selected object
+        if (hoverObject != oldHoverObject)
+        {
+            if (oldHoverObject != selectedObject)
             {
-                ApplyMaterial(hoverMaterial);
-                Debug.Log("New Object hit: "+mouseOverObject.name);
+                // reset the old hover object material
+                ApplyMaterial(defaultMaterial, oldHoverObject);
             }
+            if (hoverObject != selectedObject)
+            {
+                // highlight it
+                ApplyMaterial(hoverMaterial, hoverObject);
+            }
+        }
+
+        // if the selected object has changed
+        if (selectedObject != oldSelectedObject)
+        {
+            // reset the old selected object material
+            ApplyMaterial(defaultMaterial, oldSelectedObject);
+            // highlight it
+            ApplyMaterial(selectedMaterial, selectedObject);
         }
     }
 
     /*
      * Use raycasting to detect what object the mouse is hovering over.
-     * Assigns detected object to mouseOverObject.
+     * Returns the GameObject under the mouse or null.
      */
-    private GameObject CheckForMouseOver()
+    private GameObject GetObjectUnderMouse()
     {
-        //Debug.Log("test1");
         Ray ray = new Ray();
         GameObject hitObject = null;
         RaycastHit hitInfo;
 
-        // create a ray originating at thr mouse position moving away from the camera
+        // create a ray originating at the mouse position moving away from the camera
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         // Draw the ray
         //Debug.DrawRay(ray.origin, ray.direction * 1000, Color.yellow);
-        //Debug.Log("test2");
 
         // Do the raycast
         if (Physics.Raycast(ray, out hitInfo))
@@ -64,23 +79,22 @@ public class MouseEventController : MonoBehaviour {
             // Get the root gameobject of the collider that was hit by the ray
             hitObject = hitInfo.transform.gameObject;
             //Debug.Log("Raycast hit object " + hitObject.name);
+        }
 
-            //Debug.Log("Raycast hit " + castInfo.Length);
-        }
-        else
-        {
-            // The raycast didn't hit anything
-            //Debug.Log("Raycast hit nothing");
-        }
         return hitObject;
     }
 
     /*
-     * Chage the material on the current mouseOverObject
+     * Chage the material on the specified GameObject
      */
-    private void ApplyMaterial(Material newMaterial)
+    private void ApplyMaterial(Material newMaterial, GameObject obj)
     {
-        Renderer rend = mouseOverObject.GetComponent<Renderer>();
+        // check for null objects
+        if (obj == null)
+        {
+            return;
+        }
+        Renderer rend = obj.GetComponent<Renderer>();
         Material[] mats = rend.materials;
         mats[0] = newMaterial;
         rend.materials = mats;

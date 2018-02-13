@@ -292,7 +292,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\CameraController.cs" />
-    <Compile Include="Assets\CameraMovementScript.cs" />
     <Compile Include="Assets\CPUMemoryController.cs" />
     <Compile Include="Assets\MemoryBlock.cs" />
     <Compile Include="Assets\MemoryLayer.cs" />
