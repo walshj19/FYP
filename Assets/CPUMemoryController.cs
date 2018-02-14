@@ -5,8 +5,25 @@ using UnityEngine.UI;
 
 public class CPUMemoryController : MemoryLayer {
 
-	// Use this for initialization
-	void Start () {
+    public int programCounter = 0;
+
+    private IEnumerator ClockTick()
+    {
+        while (true)
+        {
+            processInstruction();
+            yield return new WaitForSeconds(1);
+        }
+    }
+
+    private void Awake()
+    {
+        
+    }
+
+    // Use this for initialization
+    void Start () {
+        StartCoroutine(ClockTick());
     }
 	
 	// Update is called once per frame
@@ -14,25 +31,18 @@ public class CPUMemoryController : MemoryLayer {
 		// Check for new requests
 	}
 
-    // Causes the cpu to ask the next memory layer for a chunk of memory
-    public void MakeMemoryRequest()
+    public override void FulfillRequest()
     {
-        Debug.Log("Making memory request");
-        // Set the address of the memory being asked for
 
-        // Ask the next memory layer for the memory
-        // Get a reference to the next layer
-        //return layerAbove.RequestMemory(address);
+    }
 
-        // Animate a packet going between the two layers
-        Transform origin = layerAbove.transform;
-        Transform destination = transform;
-
-        // Create a new packet object at the location of the above memory layer
-        PacketController packet = Instantiate<GameObject>(packetPrefab).GetComponent<PacketController>();
-        packet.transform.SetPositionAndRotation(origin.position, origin.rotation);
-
-        // Set the destination of the packet
-        packet.destination = destination.position;
+    /*
+     * Request an instruction from the layer above and execute it
+     */
+    public void processInstruction()
+    {
+        // request the next instruction from memory
+        MakeRequest();
+        programCounter++;
     }
 }

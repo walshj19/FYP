@@ -1,11 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class MemoryLayer : MonoBehaviour
 {
     public int absoluteLayerNumber;             // The absolute position of this layer in the memory heirarchy
     public GameObject packetPrefab;
+    public int layerLatency;
 
     public MemoryLayer layerAbove;
     public MemoryLayer layerBelow;
@@ -41,6 +41,45 @@ public class MemoryLayer : MonoBehaviour
         return layerAbove.RequestMemory(address);
     }
 
+    // Causes the cpu to ask the next memory layer for a chunk of memory
+    public virtual void MakeRequest()
+    {
+        Debug.Log("Making memory request");
+        // Set the address of the memory being asked for
+
+        // Ask the next memory layer for the memory
+        // Get a reference to the next layer
+        //return layerAbove.RequestMemory(address);
+
+        // animate the packet after this layers latency
+        layerAbove.MakeRequest();
+    }
+
+    
+    public virtual void FulfillRequest()
+    {
+        AnimateRequest();
+    }
+
+    /*
+     * Method to animate a packet from the above layer to this layer
+     */
+    public void AnimateRequest()
+    {
+        // Animate a packet going between the two layers
+        //Transform origin = layerAbove.transform;
+        //Transform destination = transform;
+
+        // Create a new packet object at the location of the above memory layer
+        PacketController packet = Instantiate<GameObject>(packetPrefab).GetComponent<PacketController>();
+        packet.transform.SetPositionAndRotation(transform.position, transform.rotation);
+
+        // set the packet source, destination and speed
+        packet.source = this;
+        packet.destination = layerBelow;
+        packet.speed = layerLatency;
+    }
+ 
     // layerAbove Getter
     public MemoryLayer GetLayerAbove()
     {
