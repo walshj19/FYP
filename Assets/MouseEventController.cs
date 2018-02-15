@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.EventSystems;
 
 public class MouseEventController : MonoBehaviour {
 
     public GameObject hoverObject = null;
     public GameObject selectedObject = null;
+
     public Material defaultMaterial;
     public Material hoverMaterial;
     public Material selectedMaterial;
+    public Material disabledMaterial;
 
 	// Use this for initialization
 	void Start () {
@@ -22,6 +25,12 @@ public class MouseEventController : MonoBehaviour {
         // record current values to detect change
         GameObject oldHoverObject = hoverObject;
         GameObject oldSelectedObject = selectedObject;
+
+        // check if the pointer is over the ui
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
 
         // Get the current hover object
         hoverObject = GetObjectUnderMouse();
@@ -98,5 +107,17 @@ public class MouseEventController : MonoBehaviour {
         Material[] mats = rend.materials;
         mats[0] = newMaterial;
         rend.materials = mats;
+    }
+
+    /*
+     * Disable the currently selected layer
+     */
+    public void DisableSelectedLayer()
+    {
+        if (selectedObject != null)
+        {
+            selectedObject.transform.root.gameObject.GetComponent<MemoryLayer>().ToggleLayer();
+            ApplyMaterial(disabledMaterial, selectedObject);
+        }
     }
 }

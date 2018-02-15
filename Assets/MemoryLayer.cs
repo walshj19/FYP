@@ -11,6 +11,8 @@ public class MemoryLayer : MonoBehaviour
     public MemoryLayer layerBelow;
     protected List<MemoryLocation> memoryLocations;
 
+    public bool layerDisabled = false;
+
     // Use this for initialization
     void Start()
     {
@@ -44,7 +46,7 @@ public class MemoryLayer : MonoBehaviour
     // Causes the cpu to ask the next memory layer for a chunk of memory
     public virtual void MakeRequest()
     {
-        Debug.Log("Making memory request");
+        //Debug.Log("Making memory request");
         // Set the address of the memory being asked for
 
         // Ask the next memory layer for the memory
@@ -80,6 +82,27 @@ public class MemoryLayer : MonoBehaviour
         packet.speed = layerLatency;
     }
  
+    /*
+     * Disable the layer so that requests pass through it
+     */
+    public void ToggleLayer()
+    {
+        if (layerDisabled)
+        {
+            // TODO: fix this, it won't work if two adjacent layers are disabled
+            layerBelow.layerAbove = this;
+            layerAbove.layerBelow = this;
+        }
+        else
+        {
+            // modify upper and lower layer to point to eachother
+            layerBelow.layerAbove = layerAbove;
+            layerAbove.layerBelow = layerBelow;
+        }
+        // toggle the flag
+        layerDisabled = !layerDisabled;
+    }
+
     // layerAbove Getter
     public MemoryLayer GetLayerAbove()
     {
