@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: 5eed3bee5095c43629440b66dd848690
+timeCreated: 1519318733
+licenseType: Free
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - packetPrefab: {fileID: 1634096632628140, guid: cec249af13276430db8fd876489b3811,
+      type: 2}
+  - memoryElement: {instanceID: 0}
+  - layerBase: {fileID: 1925211047765522, guid: d84f3fdf76a023943889ad412bd4ea88,
+      type: 2}
+  - layerAbove: {instanceID: 0}
+  - layerBelow: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

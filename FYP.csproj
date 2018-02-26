@@ -291,16 +291,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\CameraController.cs" />
-    <Compile Include="Assets\CPUMemoryController.cs" />
-    <Compile Include="Assets\EvaluationWebController.cs" />
-    <Compile Include="Assets\MemoryBlock.cs" />
-    <Compile Include="Assets\MemoryLayer.cs" />
-    <Compile Include="Assets\MemoryLocation.cs" />
-    <Compile Include="Assets\MouseEventController.cs" />
-    <Compile Include="Assets\PacketController.cs" />
-    <Compile Include="Assets\RAMMemoryController.cs" />
-    <Compile Include="Assets\UIController.cs" />
+    <Compile Include="Assets\Scripts\CameraController.cs" />
+    <Compile Include="Assets\Scripts\CPUMemoryController.cs" />
+    <Compile Include="Assets\Scripts\EvaluationWebController.cs" />
+    <Compile Include="Assets\Scripts\MemoryBlock.cs" />
+    <Compile Include="Assets\Scripts\MemoryElementController.cs" />
+    <Compile Include="Assets\Scripts\MemoryLayer.cs" />
+    <Compile Include="Assets\Scripts\MemoryLocation.cs" />
+    <Compile Include="Assets\Scripts\MouseEventController.cs" />
+    <Compile Include="Assets\Scripts\PacketController.cs" />
+    <Compile Include="Assets\Scripts\RAMMemoryController.cs" />
+    <Compile Include="Assets\Scripts\UIController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Standard Assets\Cameras\CameraGuidelines.txt" />
