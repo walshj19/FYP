@@ -47,6 +47,11 @@ public class CPUMemoryController : MemoryLayer {
         GameObject.FindGameObjectWithTag("ProgramCounter").GetComponent<TextMesh>().text = programCounter.ToString();
     }
 
+    public override Vector3 GetPositionOfElement(int address)
+    {
+        return transform.position;
+    }
+
     /*
      * Request an instruction from the layer above and execute it
      */

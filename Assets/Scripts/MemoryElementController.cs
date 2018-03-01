@@ -21,6 +21,6 @@ public class MemoryElementController : PacketController {
     protected override void FulfillRequest()
     {
         // the distination can now reply to its request
-        destination.FulfillRequest(Address);
+        destinationLayer.FulfillRequest(Address);
     }
 }

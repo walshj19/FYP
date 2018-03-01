@@ -4,23 +4,26 @@ using UnityEngine;
 
 public abstract class PacketController : MonoBehaviour {
     public float speed;
+    public float step;
 
-    public MemoryLayer source;
-    public MemoryLayer destination;
+    public MemoryLayer sourceLayer;
+    public MemoryLayer destinationLayer;
+    public Vector3 sourcePoint;
+    public Vector3 destinationPoint;
 
 	// Use this for initialization
 	public virtual void Start () {
-        
+        step = Vector3.Distance(transform.position, destinationPoint)/speed;
     }
 
     // Update is called once per frame
     public virtual void Update () {
-        if (source == null)
+        if (sourceLayer == null)
         {
             return;
         }
         // If the packet reaches its destination it should delete itself
-        if (Vector3.Distance(transform.position, destination.transform.position) < 1)
+        if (Vector3.Distance(transform.position, destinationPoint) < 1)
         {
             FulfillRequest();
             // then the packet can be destroyed
@@ -29,8 +32,8 @@ public abstract class PacketController : MonoBehaviour {
         else
         {
             // Move towards its destination
-            float step = speed * Time.deltaTime;
-            transform.position = Vector3.MoveTowards(transform.position, destination.transform.position, step);
+            float delta = step * Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, destinationPoint, step);
         }
     }
 

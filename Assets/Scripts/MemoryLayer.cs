@@ -125,8 +125,11 @@ public class MemoryLayer : MonoBehaviour
         packet.Address = address;
 
         // set the packet source, destination and speed
-        packet.source = this;
-        packet.destination = layerBelow;
+        packet.sourceLayer = this;
+        packet.destinationLayer = layerBelow;
+        packet.sourcePoint = GetPositionOfElement(address);
+        packet.transform.position = packet.sourcePoint;
+        packet.destinationPoint = layerBelow.GetPositionOfElement(address);
         packet.speed = layerLatency;
     }
  
@@ -149,6 +152,18 @@ public class MemoryLayer : MonoBehaviour
         }
         // toggle the flag
         layerDisabled = !layerDisabled;
+    }
+
+    // get the vector location of a specific memory address in this layer
+    public virtual Vector3 GetPositionOfElement(int address)
+    {
+        Vector3 pos = new Vector3();
+        pos = transform.position;
+        pos.y = 2;
+        pos.z -= (float)System.Math.Floor((double)address/maxWidth);
+        pos.x += address%maxWidth*3;
+
+        return pos;
     }
 
     // layerAbove Getter
