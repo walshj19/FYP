@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /*
  * Base class for all memory layers. Holds general state such as size and methods for memory access.
@@ -12,6 +13,7 @@ public class MemoryLayer : MonoBehaviour
 
     public int maxWidth = 10;
     public int size = 100;
+    public int maxSize = 300;
     public GameObject memoryElement;
     public GameObject layerBase;
 
@@ -20,6 +22,7 @@ public class MemoryLayer : MonoBehaviour
     protected List<int> memoryLocations;
 
     public bool layerDisabled = false;
+    private GameObject baseShape;
 
     public virtual void Awake()
     {
@@ -31,7 +34,7 @@ public class MemoryLayer : MonoBehaviour
     {
         CreateBase();
 
-        CreateMemoryElements();
+        //CreateMemoryElements();
     }
 
     // Update is called once per frame
@@ -51,10 +54,15 @@ public class MemoryLayer : MonoBehaviour
         basePos.x += (maxWidth * 3) / 2;
         basePos.y = .5f;
 
-        Vector3 baseScale = new Vector3(maxWidth * 3, 1, size / maxWidth);
 
         // when first drawn the layer should draw its base shape
-        GameObject baseShape = Instantiate<GameObject>(layerBase, basePos, transform.rotation, transform);
+        baseShape = Instantiate<GameObject>(layerBase, basePos, transform.rotation, transform);
+        UpdateBase();
+    }
+
+    private void UpdateBase()
+    {
+        Vector3 baseScale = new Vector3(maxWidth * 3, 1, size / maxWidth);
         baseShape.transform.localScale = baseScale;
     }
 
@@ -109,6 +117,10 @@ public class MemoryLayer : MonoBehaviour
         if (memoryLocations.BinarySearch(address) < 0)
         {
             memoryLocations.Add(address);
+            //create the address element
+            MemoryElementController packet = Instantiate<GameObject>(packetPrefab).GetComponent<MemoryElementController>();
+            packet.transform.SetPositionAndRotation(GetPositionOfElement(address), transform.rotation);
+            packet.Address = address;
         }
     }
 
@@ -166,27 +178,25 @@ public class MemoryLayer : MonoBehaviour
         return pos;
     }
 
-    // layerAbove Getter
-    public MemoryLayer GetLayerAbove()
+    public void UpdateSize()
     {
-        return layerAbove;
+        Slider slider = GameObject.FindGameObjectWithTag("SizeSlider").GetComponent<Slider>();
+
+        size =(int) (slider.value * (float)maxSize);
+        Debug.Log(slider.value+" "+maxSize+" "+size);
+
+        UpdateBase();
+
+        UpdateMemoryLocations();
     }
 
-    // layerBelow Getter
-    public MemoryLayer GetLayerBelow()
+    private void UpdateMemoryLocations()
     {
-        return layerBelow;
-    }
-
-    // Add a new memory layer above this one
-    public void InsertLayerAbove(MemoryLayer newLayer)
-    {
-        layerAbove = newLayer;
-    }
-
-    // Add a new memory layer below this one
-    public void InsertLayerBelow(MemoryLayer newLayer)
-    {
-        layerBelow = newLayer;
+        //if the list is longer than the length shrink it
+        if (memoryLocations.Count > size)
+        {
+            //discard extra elements
+            memoryLocations.RemoveRange(size, memoryLocations.Count);
+        }
     }
 }
