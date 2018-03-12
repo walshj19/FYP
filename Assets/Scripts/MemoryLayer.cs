@@ -19,7 +19,7 @@ public class MemoryLayer : MonoBehaviour
 
     public MemoryLayer layerAbove;
     public MemoryLayer layerBelow;
-    protected List<int> memoryLocations;
+    public List<int> memoryLocations;
 
     public bool layerDisabled = false;
     private GameObject baseShape;
@@ -40,7 +40,7 @@ public class MemoryLayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        CreateMemoryElements();
     }
 
     /*
@@ -54,7 +54,6 @@ public class MemoryLayer : MonoBehaviour
         basePos.x += (maxWidth * 3) / 2;
         basePos.y = .5f;
 
-
         // when first drawn the layer should draw its base shape
         baseShape = Instantiate<GameObject>(layerBase, basePos, transform.rotation, transform);
         UpdateBase();
@@ -62,8 +61,11 @@ public class MemoryLayer : MonoBehaviour
 
     private void UpdateBase()
     {
-        Vector3 baseScale = new Vector3(maxWidth * 3, 1, size / maxWidth);
+        float basex = maxWidth * 3;
+        float basez = (size / maxWidth)+1;
+        Vector3 baseScale = new Vector3(basex, 1, basez);
         baseShape.transform.localScale = baseScale;
+        baseShape.transform.localPosition = new Vector3(basex / 2, 1, -(basez / 2));
     }
 
     /*
@@ -74,23 +76,19 @@ public class MemoryLayer : MonoBehaviour
         // add memory blocks based on size
         // so if this is ram and the size is 1024 it should add 1024 memory blocks and arrange them appropriately
         // memory blocks should be layed out in a fixed width grid 
-        for (int i = 0; i < (size / maxWidth); i++)
+        foreach (int address in memoryLocations)
         {
-            for (int j = 0; j < maxWidth; j++)
-            {
-                // calculate where the element should be placed
-                Vector3 pos = transform.position;
-                pos.z -= i;
-                pos.x += j * 3;
-                pos.y = 1;
+            int listPosition = memoryLocations.BinarySearch(address);
+            // calculate where the element should be placed
+            Vector3 pos = transform.position;
+            pos.z -= (float)System.Math.Floor((double)listPosition / maxWidth);
+            pos.x += (listPosition%maxWidth) * 3;
+            pos.y = 1;
 
-                //place one element
-                GameObject elem = Instantiate<GameObject>(memoryElement, pos, transform.rotation, transform);
-                // calculate current element number and set address field
-                int address = (i * maxWidth) + j;
-                elem.transform.Find("Address Label").gameObject.GetComponent<TextMesh>().text = address.ToString();
-
-            }
+            //place one element
+            GameObject elem = Instantiate<GameObject>(memoryElement, pos, transform.rotation, transform);
+            // calculate current element number and set address field
+            elem.transform.Find("Address Label").gameObject.GetComponent<TextMesh>().text = address.ToString();
         }
     }
 
@@ -183,7 +181,9 @@ public class MemoryLayer : MonoBehaviour
         Slider slider = GameObject.FindGameObjectWithTag("SizeSlider").GetComponent<Slider>();
 
         size =(int) (slider.value * (float)maxSize);
-        Debug.Log(slider.value+" "+maxSize+" "+size);
+        //Debug.Log(slider.value+" "+maxSize+" "+size);
+
+        GameObject.FindGameObjectWithTag("Layer Size Value").GetComponent<Text>().text = size.ToString();
 
         UpdateBase();
 

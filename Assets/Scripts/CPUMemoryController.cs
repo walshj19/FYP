@@ -44,7 +44,8 @@ public class CPUMemoryController : MemoryLayer {
             programCounter++;
         }
         // update program counter ui
-        GameObject.FindGameObjectWithTag("ProgramCounter").GetComponent<TextMesh>().text = programCounter.ToString();
+        //GameObject.FindGameObjectWithTag("ProgramCounter").GetComponent<TextMesh>().text = programCounter.ToString();
+        GameObject.FindGameObjectWithTag("Program Counter").GetComponent<Text>().text = programCounter.ToString();
     }
 
     public override Vector3 GetPositionOfElement(int address)
