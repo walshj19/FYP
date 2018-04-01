@@ -25,9 +25,10 @@ public class MemoryLayerIntegration {
 
         // set the position of the layers
         layer.gameObject.transform.position = pos;
+
         // set the layer base objects to a rect
-        layer.layerBase = GameObject.Instantiate(prefabLayerBase);
-        layer.layerBase.transform.parent = layer.transform;
+        //layer.layerBase = GameObject.Instantiate(prefabLayerBase);
+        //layer.layerBase.transform.parent = layer.transform;
 
         return layer;
     }
@@ -52,9 +53,11 @@ public class MemoryLayerIntegration {
     [UnityTest]
     public IEnumerator SingleMemoryRequest ()
     {
+        int testAddress = 0;
+
         // create two mock layers
-        MemoryLayer upperLayer = MockLayer(new Vector3(0, 0, 50));
-        MemoryLayer lowerLayer = MockLayer(new Vector3(50, 0, 50));
+        MemoryLayer upperLayer = MockLayer(new Vector3(50, 0, 50));
+        MemoryLayer lowerLayer = MockLayer(new Vector3(0, 0, 50));
 
         // release for a frame so that start can be called on the layers
         yield return null;
@@ -63,6 +66,20 @@ public class MemoryLayerIntegration {
         upperLayer.layerBelow = lowerLayer;
         lowerLayer.layerAbove = upperLayer;
 
-        // 
+        // set the layer latencies to 1 which will make the packets arrive in a single update
+        upperLayer.layerLatency = 1;
+        lowerLayer.layerLatency = 1;
+
+        // add some memory addresses to the upper layer
+        upperLayer.AddMemoryLocation(testAddress);
+
+        // make some requests on the lower layer
+        lowerLayer.MakeRequest(testAddress);
+
+        // wait until the request has been fulfilled
+        yield return new WaitForSeconds(1);
+
+        // Check that the lower layer now has the address in its list
+        Assert.IsTrue(lowerLayer.CheckForAddress(testAddress) >= 0);
     }
 }

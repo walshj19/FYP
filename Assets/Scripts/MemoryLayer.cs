@@ -7,26 +7,32 @@ using UnityEngine.UI;
  */
 public class MemoryLayer : MonoBehaviour
 {
-    public int absoluteLayerNumber;             // The absolute position of this layer in the memory heirarchy
-    public GameObject packetPrefab;             // The prefab that will be used when generating packets
-    public int layerLatency = 10;                                // The time it will take for packets from this layer to reach the next layer
-
+    public int absoluteLayerNumber;                         // The absolute position of this layer in the memory heirarchy
+    public GameObject packetPrefab;                         // The prefab that will be used when generating packets
+    public int layerLatency = 10;                           // The time it will take for packets from this layer to reach the next layer
     public int maxWidth = 10;                               // maximum number of memory elements in a row
     public int size = 10;                                   // current max number of elements in this layer
     public int maxSize = 300;                               // absolute max number of elements this layer can have
-    public GameObject memoryElement;                        // 
-    public GameObject layerBase;                            // 
-
+    public GameObject layerBase;                            // The prefab used for the layer base shape
     public MemoryLayer layerAbove;                          // layer requests will be passed to
     public MemoryLayer layerBelow;                          // layer requests will be received from
     public List<MemoryElementController> memoryLocations;   // Contains the addresses stored in this layer
-
     public bool layerDisabled = false;                      // if disabled this layer won't send or receive requests
     private GameObject baseShape;                           // reference to the base shape object for this layer
 
     public virtual void Awake()
     {
+        // Declare the list of memory locations
         memoryLocations = new List<MemoryElementController>();
+
+        // Load the prefabs
+        layerBase = Resources.Load("Prefabs/LayerBase", typeof(GameObject)) as GameObject;
+        packetPrefab = Resources.Load("Prefabs/Ram Memory Element", typeof(GameObject)) as GameObject;
+
+        if (layerBase == null || packetPrefab == null)
+        {
+            Debug.Log("Couldn't load MemoryLayer prefabs");
+        }
     }
 
     // Use this for initialization
@@ -43,8 +49,7 @@ public class MemoryLayer : MonoBehaviour
         CreateMemoryElements();
     }
 
-    /*
-     * Creates the base shape for the layer based on its size
+    /* Creates the base shape for the layer based on its size
      */
     private void CreateBase()
     {
@@ -66,8 +71,7 @@ public class MemoryLayer : MonoBehaviour
         baseShape.transform.localPosition = new Vector3(baseX / 2, 1, -(baseZ / 2));
     }
 
-    /*
-     * Creates all of the memory elements for this layer based on its size
+    /* Creates all of the memory elements for this layer based on its size
      */
     private void CreateMemoryElements()
     {
@@ -110,18 +114,21 @@ public class MemoryLayer : MonoBehaviour
 
     public virtual void FulfillRequest(int address)
     {
-        AnimateRequest(address);
+        if (layerBelow != null)
+        {
+            AnimateRequest(address);
+        }
 
         Debug.Log("Layer " + absoluteLayerNumber + ": Fulfilling request for address=" + address);
         // if the address isn't in this layers cache yet add it
         if (CheckForAddress(address) < 0)
         {
             Debug.Log("Layer " + absoluteLayerNumber + ": Address not in cache, adding to cache address=" + address);
-            AddMemoryLocation(address);            
+            AddMemoryLocation(address);
         }
     }
 
-    protected void AddMemoryLocation(int address)
+    public void AddMemoryLocation(int address)
     {
         // check if the layer is full
         if (memoryLocations.Count >= size)
@@ -161,9 +168,9 @@ public class MemoryLayer : MonoBehaviour
         memoryLocations.TrimExcess();
     }
 
-    /* Returns true if the address is stored in this layer, false otherwise
+    /* Returns the address of the item if found or -1 if not
      */
-    private int CheckForAddress(int address)
+    public int CheckForAddress(int address)
     {
         int index = -1;
         for (int i = 0; i < memoryLocations.Count; i++)

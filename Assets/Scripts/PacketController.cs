@@ -22,18 +22,17 @@ public abstract class PacketController : MonoBehaviour {
         {
             return;
         }
+
+        // Move towards its destination
+        float delta = step * Time.deltaTime;
+        transform.position = Vector3.MoveTowards(transform.position, destinationPoint, step);
+
         // If the packet reaches its destination it should delete itself
         if (Vector3.Distance(transform.position, destinationPoint) < 1)
         {
             FulfillRequest();
             // then the packet can be destroyed
             Destroy(this.gameObject);
-        }
-        else
-        {
-            // Move towards its destination
-            float delta = step * Time.deltaTime;
-            transform.position = Vector3.MoveTowards(transform.position, destinationPoint, step);
         }
     }
 
