@@ -14,14 +14,14 @@ public class UIController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //get all of the static memory elements and delete them every frame
-        GameObject[] elements = GameObject.FindGameObjectsWithTag("MemoryElement");
-        foreach (GameObject element in elements)
-        {
-            MemoryElementController controller = element.GetComponent<MemoryElementController>();
-            if (controller.destinationLayer == null && controller.sourceLayer == null)
-            {
-                Destroy(element, .1f);
-            }
-        }
+        //GameObject[] elements = GameObject.FindGameObjectsWithTag("MemoryElement");
+        //foreach (GameObject element in elements)
+        //{
+        //    MemoryElementController controller = element.GetComponent<MemoryElementController>();
+        //    if (controller.destinationLayer == null && controller.sourceLayer == null)
+        //    {
+        //        Destroy(element, .1f);
+        //    }
+        //}
     }
 }

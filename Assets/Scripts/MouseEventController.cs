@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 using UnityEngine.EventSystems;
 
@@ -63,6 +64,16 @@ public class MouseEventController : MonoBehaviour {
             ApplyMaterial(defaultMaterial, oldSelectedObject);
             // highlight it
             ApplyMaterial(selectedMaterial, selectedObject);
+            if (selectedObject == null || selectedObject.transform.root.gameObject.GetComponent<MemoryLayer>() == null)
+            {
+                // clear the ui
+                GameObject.FindGameObjectWithTag("SelectedLayerText").GetComponent<Text>().text = "";
+            }
+            else
+            {
+                // update the ui
+                UpdateUI();
+            }
         }
     }
 
@@ -99,7 +110,7 @@ public class MouseEventController : MonoBehaviour {
     private void ApplyMaterial(Material newMaterial, GameObject obj)
     {
         // check for null objects
-        if (obj == null)
+        if (obj == null || obj.transform.root.gameObject.GetComponent<MemoryLayer>() == null)
         {
             return;
         }
@@ -107,6 +118,15 @@ public class MouseEventController : MonoBehaviour {
         Material[] mats = rend.materials;
         mats[0] = newMaterial;
         rend.materials = mats;
+    }
+
+    private void UpdateUI()
+    {
+        MemoryLayer layer = selectedObject.transform.root.GetComponent<MemoryLayer>();
+
+        GameObject.FindGameObjectWithTag("SelectedLayerText").GetComponent<Text>().text = layer.name;
+        layer.UpdateSizeLabel();
+        layer.SetSizeSliderPosition();
     }
 
     /*
@@ -118,6 +138,20 @@ public class MouseEventController : MonoBehaviour {
         {
             selectedObject.transform.root.gameObject.GetComponent<MemoryLayer>().ToggleLayer();
             ApplyMaterial(disabledMaterial, selectedObject);
+        }
+        else
+        {
+            Debug.Log("UI: Atempt to disable layer but no layer selected");
+        }
+    }
+
+    public void UpdateLayerSize()
+    {
+        Slider slider = GameObject.FindGameObjectWithTag("SizeSlider").GetComponent<Slider>();
+
+        if(selectedObject != null && selectedObject.transform.root.gameObject.GetComponent<MemoryLayer>() != null)
+        {
+            selectedObject.transform.root.gameObject.GetComponent<MemoryLayer>().UpdateSize(slider.value);
         }
     }
 }
