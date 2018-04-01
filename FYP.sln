@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2017
+# Visual Studio for Mac
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FYP", "FYP.csproj", "{4D7BA9DC-63CF-1F20-D9E0-619BCC40302F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FYP.Plugins", "FYP.Plugins.csproj", "{ED8008DC-6174-A246-E6F5-B5BEFB2EE312}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FYP.Editor", "FYP.Editor.csproj", "{577D796C-7C30-5E75-4333-45BD8AD128BC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FYP.Editor.Plugins", "FYP.Editor.Plugins.csproj", "{EA8065F4-65A1-29D4-8DBE-FA9DEBDE2F69}"
 EndProject
@@ -21,6 +23,10 @@ Global
 		{ED8008DC-6174-A246-E6F5-B5BEFB2EE312}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED8008DC-6174-A246-E6F5-B5BEFB2EE312}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED8008DC-6174-A246-E6F5-B5BEFB2EE312}.Release|Any CPU.Build.0 = Release|Any CPU
+		{577D796C-7C30-5E75-4333-45BD8AD128BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{577D796C-7C30-5E75-4333-45BD8AD128BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{577D796C-7C30-5E75-4333-45BD8AD128BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{577D796C-7C30-5E75-4333-45BD8AD128BC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EA8065F4-65A1-29D4-8DBE-FA9DEBDE2F69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EA8065F4-65A1-29D4-8DBE-FA9DEBDE2F69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA8065F4-65A1-29D4-8DBE-FA9DEBDE2F69}.Release|Any CPU.ActiveCfg = Release|Any CPU

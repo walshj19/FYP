@@ -9,7 +9,7 @@ public class MemoryLayer : MonoBehaviour
 {
     public int absoluteLayerNumber;             // The absolute position of this layer in the memory heirarchy
     public GameObject packetPrefab;             // The prefab that will be used when generating packets
-    public int layerLatency;
+    public int layerLatency = 10;
 
     public int maxWidth = 10;
     public int size = 100;
@@ -48,24 +48,22 @@ public class MemoryLayer : MonoBehaviour
      */
     private void CreateBase()
     {
-        // calculate where the element should be placed
-        Vector3 basePos = transform.position;
-        basePos.z -= size / maxWidth / 2f;
-        basePos.x += (maxWidth * 3) / 2;
-        basePos.y = .5f;
-
         // when first drawn the layer should draw its base shape
-        baseShape = Instantiate<GameObject>(layerBase, basePos, transform.rotation, transform);
+        baseShape = Instantiate<GameObject>(
+            layerBase,
+            transform.position,
+            transform.rotation,
+            transform);
         UpdateBase();
     }
 
     private void UpdateBase()
     {
-        float basex = maxWidth * 3;
-        float basez = (size / maxWidth)+1;
-        Vector3 baseScale = new Vector3(basex, 1, basez);
+        float baseX = maxWidth * 3;
+        float baseZ = (size / maxWidth) + 1;
+        Vector3 baseScale = new Vector3(baseX, 1, baseZ);
         baseShape.transform.localScale = baseScale;
-        baseShape.transform.localPosition = new Vector3(basex / 2, 1, -(basez / 2));
+        baseShape.transform.localPosition = new Vector3(baseX / 2, 1, -(baseZ / 2));
     }
 
     /*
@@ -82,7 +80,7 @@ public class MemoryLayer : MonoBehaviour
             // calculate where the element should be placed
             Vector3 pos = transform.position;
             pos.z -= (float)System.Math.Floor((double)listPosition / maxWidth);
-            pos.x += (listPosition%maxWidth) * 3;
+            pos.x += (listPosition % maxWidth) * 3;
             pos.y = 1;
 
             //place one element
@@ -106,7 +104,7 @@ public class MemoryLayer : MonoBehaviour
             layerAbove.MakeRequest(address);
         }
     }
-    
+
     public virtual void FulfillRequest(int address)
     {
         AnimateRequest(address);
@@ -142,7 +140,7 @@ public class MemoryLayer : MonoBehaviour
         packet.destinationPoint = layerBelow.GetPositionOfElement(address);
         packet.speed = layerLatency;
     }
- 
+
     /*
      * Disable the layer so that requests pass through it
      */
@@ -170,8 +168,8 @@ public class MemoryLayer : MonoBehaviour
         Vector3 pos = new Vector3();
         pos = transform.position;
         pos.y = 2;
-        pos.z -= (float)System.Math.Floor((double)address/maxWidth);
-        pos.x += address%maxWidth*3;
+        pos.z -= (float)System.Math.Floor((double)address / maxWidth);
+        pos.x += address % maxWidth * 3;
 
         return pos;
     }
@@ -180,7 +178,7 @@ public class MemoryLayer : MonoBehaviour
     {
         Slider slider = GameObject.FindGameObjectWithTag("SizeSlider").GetComponent<Slider>();
 
-        size =(int) (slider.value * (float)maxSize);
+        size = (int)(slider.value * (float)maxSize);
         //Debug.Log(slider.value+" "+maxSize+" "+size);
 
         GameObject.FindGameObjectWithTag("Layer Size Value").GetComponent<Text>().text = size.ToString();
