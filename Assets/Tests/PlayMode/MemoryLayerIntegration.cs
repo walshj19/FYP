@@ -150,4 +150,7 @@ public class MemoryLayerIntegration {
 		// it should also only contain three elements
 		Assert.IsTrue(3 == lowerLayer.memoryLocations.Count);
 	}
+
+	/* 
+	 */
 }
