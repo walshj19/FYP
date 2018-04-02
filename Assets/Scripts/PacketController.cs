@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public abstract class PacketController : MonoBehaviour {
     public float speed;
@@ -24,7 +22,7 @@ public abstract class PacketController : MonoBehaviour {
         }
 
         // Move towards its destination
-        float delta = step * Time.deltaTime;
+        //float delta = step * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, destinationPoint, step);
 
         // If the packet reaches its destination it should delete itself

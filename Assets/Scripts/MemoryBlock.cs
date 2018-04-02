@@ -8,6 +8,11 @@ public class MemoryBlock : MonoBehaviour {
 
     private List<MemoryLocation> contents;  // The MemoryLocations contained within this block
 
+	private void Awake()
+	{
+		contents = new List<MemoryLocation>();
+	}
+
 	// Use this for initialization
 	void Start () {
 		
