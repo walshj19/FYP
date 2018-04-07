@@ -151,6 +151,31 @@ public class MemoryLayerIntegration {
 		Assert.IsTrue(3 == lowerLayer.memoryLocations.Count);
 	}
 
-	/* 
+	/* Creates a memory layer, adds some memory elements to it then clears it
 	 */
+	[UnityTest]
+	public IEnumerator ClearingLayer ()
+	{
+		// setup the layer
+		MemoryLayer layer = MockLayer(new Vector3(0, 0, 50));
+
+		// release for a frame so that start can be called on the layer
+		yield return null;
+
+		// add addresses to the layer
+		layer.AddMemoryLocation(0);
+		layer.AddMemoryLocation(1);
+		layer.AddMemoryLocation(2);
+		layer.AddMemoryLocation(3);
+		layer.AddMemoryLocation(4);
+
+		// make sure they were added correctly
+		Assert.IsTrue(layer.memoryLocations.Count == 5);
+
+		// clear the layer
+		layer.ClearLayer();
+
+		// make sure the layer is now empty
+		Assert.IsTrue(layer.memoryLocations.Count == 0);
+	}
 }

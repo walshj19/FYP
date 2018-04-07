@@ -297,4 +297,15 @@ public class MemoryLayer : MonoBehaviour
 			}
 		}
 	}
+
+	/* Clear the contets of the memory layer list and delete all memory elements.
+	 */
+	public void ClearLayer ()
+	{
+		Debug.Log("Layer " + absoluteLayerNumber + ": Clearing " + memoryLocations.Count + " elements from layer.");
+		while (memoryLocations.Count > 0)
+		{
+			RemoveMemoryLocation(0);
+		}
+	}
 }
