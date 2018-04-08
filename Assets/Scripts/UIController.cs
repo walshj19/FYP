@@ -108,6 +108,7 @@ public class UIController : MonoBehaviour {
 	 */
 	private void ApplyMaterial(Material newMaterial, GameObject obj)
 	{
+		if (IsLayer(obj))
 		{
 			Renderer rend = obj.GetComponent<Renderer>();
 			Material[] mats = rend.materials;
@@ -180,5 +181,6 @@ public class UIController : MonoBehaviour {
 	 */
 	private bool IsLayer(GameObject obj)
 	{
+		return (obj != null && obj.transform.root.gameObject.GetComponent<MemoryLayer>() != null);
 	}
 }
